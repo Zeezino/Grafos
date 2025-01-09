@@ -11,7 +11,11 @@ void buscaProfundidade(Grafo* gr, int ini, int* visitados, int cont);
 void buscaLargura(Grafo* gr, int ini);
 
 void dijkstra(Grafo* gr, int ini);
+void dijkstraFila(Grafo* gr, int ini);
 void bellmanFord(Grafo* gr, int ini);
 void floyd(Grafo* gr);
+
+void prim(Grafo* gr, int ini);
+void kruskal(Grafo* gr, int ini);
 
 void printarGrafo(Grafo* gr);

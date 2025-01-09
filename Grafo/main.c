@@ -13,7 +13,9 @@ int main(){
     inserirAresta(gr, 3, 4, eh_digrafo, 0);
     inserirAresta(gr, 4, 1, eh_digrafo, 0);
 
+    // algoritmo de busca
     floyd(gr);
+    // algoritmo de spanning tree
 
     printarGrafo(gr);
 

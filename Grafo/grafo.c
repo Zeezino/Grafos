@@ -39,7 +39,6 @@ Grafo* criaGrafo(int nro_vert, int Amax, int eh_ponderado){
 
         return gr;
     }
-
     exit(1);
 }
 
@@ -185,143 +184,9 @@ void buscaLargura(Grafo* gr, int ini){
     free(visitados);
 }
 
-void dijkstra(Grafo* gr, int ini){
-    int I, NV, ind, vert;
-    NV = gr->nro_vert;
-
-    int* visitados = (int*) malloc (NV * sizeof(int));
-    int* ant = (int*) malloc (NV * sizeof(int));
-    int* dist = (int*) malloc (NV * sizeof(int));
-
-    for(I=0; I<NV; I++){
-        visitados[I] = 0;
-        ant[I] = -1;
-        dist[I] = INT_MAX;
-    }
-    dist[ini] = 0;
-
-    for(I=0; I<NV; I++){
-        vert = -1;
-        for(int II=0; II<NV; II++){
-            if(!visitados[II] && (vert == -1 || dist[II] < dist[vert]))
-                vert = II;
-        }
-
-        if(vert == -1 || dist[vert] == INT_MAX)
-            break;
-
-        visitados[vert] = 1;
-
-        for(int II=0; II<gr->grau[vert]; II++){
-            ind = gr->arestas[vert][II];
-            if(dist[ind] > dist[vert] + (gr->eh_ponderado ? gr->pesos[vert][II] : 1)){
-                dist[ind] = dist[vert] + (gr->eh_ponderado ? gr->pesos[vert][II] : 1);
-                ant[ind] = vert;
-            }
-        }
-    }
-        
-    printf("\n");
-    for(I=0; I<NV; I++){
-        printf("%d ", dist[I]);
-    }
-    printf("\n");
-
-    free(visitados);
-    free(ant);
-    free(dist);
-}
-
-void bellmanFord(Grafo* gr, int ini){
-    int I, II, NV, ind, vert;
-    NV = gr->nro_vert;
-
-    int* ant = (int*) malloc (NV * sizeof(int));
-    int* dist = (int*) malloc (NV * sizeof(int));
-
-    for(I=0; I<NV; I++){
-        ant[I] = -1;
-        dist[I] = INT_MAX;
-    }
-    dist[ini] = 0;
-
-    for(I=0; I<NV-1; I++){
-        for(vert=0; vert<NV; vert++){
-            for(II=0; II<gr->grau[vert]; II++){
-                ind = gr->arestas[vert][II];
-                if(dist[ind] > dist[vert] + (gr->eh_ponderado ? gr->pesos[vert][II] : 1)){
-                    dist[ind] = dist[vert] + (gr->eh_ponderado ? gr->pesos[vert][II] : 1);
-                    ant[ind] = vert;
-                }
-            }
-        }
-    }
-
-    for(vert=0; vert<NV; vert++){
-        for(II=0; II<gr->grau[vert]; II++){
-            ind = gr->arestas[vert][II];
-            if(dist[ind] > dist[vert] + (gr->eh_ponderado ? gr->pesos[vert][II] : 1)){
-                printf("\nGrafo possui ciclo negativo\n\n");
-                return;
-            }
-        }
-    }
-
-    printf("\n");
-    for(I=0; I<NV; I++){
-        printf("%d ", dist[I]);
-    }
-    printf("\n");
-
-    free(ant);
-    free(dist);
-}
-
-void floyd(Grafo* gr){
-    int I, II, III, NV;
-    NV = gr->nro_vert;
-
-    int** dist = (int**) malloc (NV * sizeof(int*));
-    for(I=0; I<NV; I++){
-        dist[I] = (int*) malloc (NV * sizeof(int));
-        for(II=0; II<NV; II++){
-            dist[I][II] = INT_MAX;
-        }
-    }
-
-    for(I=0; I<NV; I++){
-        dist[I][I] = 0;
-        for(II=0; II<gr->grau[I]; II++){
-            dist[I][gr->arestas[I][II]] = gr->eh_ponderado ? gr->pesos[I][II] : 1;
-        }
-    }
-
-    for(III=0; III<NV; III++){
-        for(I=0; I<NV; I++){
-            for(II=0; II<NV; II++){
-                if(dist[I][II] > dist[I][III] + dist[III][II]){
-                    dist[I][II] = dist[I][III] + dist[III][II];
-                }
-            }
-        }
-    }
-
-    for(I=0; I<NV; I++){
-        for(II=0; II<NV; II++){
-            printf("%d ", dist[I][II]);
-        }
-        printf("\n");
-    }
-
-    for(I=0; I<NV; I++){
-        free(dist[I]);
-    }
-    free(dist);
-}
-
 void printarGrafo(Grafo* gr){
     int I, II;
-    printf("\n");
+    printf("\nImpressao dos vertices e seus vizinhos:\n");
     for(I=0; I<gr->nro_vert; I++){
         printf("Vertice %d: ", I+1);
         for(II=0; II<gr->grau[I]; II++){
