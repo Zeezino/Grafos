@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <limits.h>
+#include <stdbool.h>
 #include "grafo.h"
 
 struct grafo{
@@ -255,8 +256,51 @@ void floyd(Grafo* gr){
     free(dist);
 }
 
-void prim(Grafo* gr, int ini){
+void prim(Grafo* gr, int ini) {
+    int NV = gr->nro_vert;
+    int* chave = (int*)malloc(NV * sizeof(int));
+    bool* mstSet = (bool*)malloc(NV * sizeof(bool));
+    int* parent = (int*)malloc(NV * sizeof(int));
 
+    for (int i = 0; i < NV; i++) {
+        chave[i] = INT_MAX;
+        mstSet[i] = false;
+        parent[i] = -1;
+    }
+
+    chave[ini] = 0;
+    parent[ini] = 0;
+
+    for (int count = 0; count < NV - 1; count++) {
+        int u = -1;
+        int min = INT_MAX;
+
+        for (int v = 0; v < NV; v++) {
+            if (!mstSet[v] && chave[v] < min) {
+                min = chave[v];
+                u = v;
+            }
+        }
+
+        mstSet[u] = true;
+
+        for (int v = 0; v < NV; v++) {
+            int peso = gr->eh_ponderado ? gr->pesos[u][v] : 1;
+            if (gr->arestas[u][v] && !mstSet[v] && peso < chave[v]) {
+                parent[v] = u;
+                chave[v] = peso;
+            }
+        }
+    }
+
+    printf("Arestas da MST gerada pelo algoritmo de Prim:\n");
+    for (int i = 0; i < NV; i++) {
+        printf("%d - %d\n", parent[i], i);
+    }
+
+    free(chave);
+    free(mstSet);
+    free(parent);
 }
 
 void kruskal(Grafo* gr, int ini){

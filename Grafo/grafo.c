@@ -130,7 +130,7 @@ void iniciaBuscaProfundidade(Grafo* gr, int ini){
 
     printf("\n");
     for(I=0; I<gr->nro_vert; I++){
-        printf("%d ", visitados[I]);
+        printf("%d ", visitados[I]-1);
     }
     printf("\n");
 
@@ -163,8 +163,7 @@ void buscaLargura(Grafo* gr, int ini){
     while(IF!=FF){
         IF = (IF+1) % gr->nro_vert;
         vert = fila[IF];
-        cont++;
-
+        
         for(I=0; I<gr->grau[vert]; I++){
             if(!visitados[gr->arestas[vert][I]]){
                 FF = (FF+1) % gr->nro_vert;
@@ -172,11 +171,12 @@ void buscaLargura(Grafo* gr, int ini){
                 visitados[gr->arestas[vert][I]] = cont;
             }
         }
+        cont++;
     }
 
     printf("\n");
     for(int I=0; I<gr->nro_vert; I++){
-        printf("%d ", visitados[I]);
+        printf("%d ", visitados[I]-1);
     }
     printf("\n");
 
@@ -188,9 +188,9 @@ void printarGrafo(Grafo* gr){
     int I, II;
     printf("\nImpressao dos vertices e seus vizinhos:\n");
     for(I=0; I<gr->nro_vert; I++){
-        printf("Vertice %d: ", I+1);
+        printf("Vertice %d: ", I);
         for(II=0; II<gr->grau[I]; II++){
-            printf("%d ", gr->arestas[I][II]+1);
+            printf("%d ", gr->arestas[I][II]);
         }
         printf("\n");
     }
